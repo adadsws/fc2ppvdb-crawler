@@ -1,0 +1,4 @@
+1
+00:02:06,130 --> 00:02:07,310
+Turn your head towards me from the left
+左から顔こっち向いて
