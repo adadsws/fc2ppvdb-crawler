@@ -1,0 +1,72 @@
+$(document).on('click','#bookmarked',function(event){
+// $('#bookmarked').click(function(event){
+    event.preventDefault();
+    // let articleId = $("#article-id").val();
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+    }
+    $.ajax({
+        method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+            },
+        url : url,
+        data:{
+            'id': id,
+        },
+        dataType: 'json',
+
+    success : function(response) {
+        if (response.success === true) {
+            if(response.status === 'Bookmarked'){
+                $("#unheart").remove();
+                // console.log('unheart削除');
+                var html = '<div id="hearted" class="px-2 flex flex-row dark:border-gray-800">';
+                    html += '<div id="tooltip-trigger-button" data-tooltip-target="tooltip-bookmark-button">';
+                    html += '<a id="bookmarked" class="inline-flex items-center" href="#">';
+                    html += '<input type="hidden" id="reactant-id" value="'+ response.id +'">';
+                    html += '<svg class="w-6 h-6 text-gray-800 dark:fill-red-500 dark:hover:fill-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ef5763" viewBox="0 0 24 24"><path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z"/></svg>';
+                    // html += '<div class="px-3 text-sm text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-center me-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">お気に入りを解除</div>';
+                    html += '</a>';
+                    html += '</div>';
+                    html += '<span class="mx-1 text-white">'+ response.count +'</span>';
+                    html += '<div id="tooltip-bookmark-button" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">';
+                    html += 'お気に入りを解除<div class="tooltip-arrow" data-popper-arrow></div>'
+                    html += '</div>';
+                    html += '</div>';
+                $('#bookmark').append(html);
+            }else{
+                $("#hearted").remove();
+                // console.log('hearted削除');
+                var html = '<div id="unheart" class="px-2 flex flex-row dark:border-gray-800">';
+                    html += '<div id="tooltip-trigger-button" data-tooltip-target="tooltip-bookmark-button">';
+                    html += '<a id="bookmarked" class="inline-flex items-center" href="#">';
+                    html += '<input type="hidden" id="reactant-id" value="'+ response.id +'">';
+                    html += '<svg class="w-6 h-6 text-gray-800 dark:fill-gray-400 dark:hover:fill-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#c3c3c3" viewBox="0 0 24 24"><path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z"/></svg>';
+                    // html += '<div class="px-3 text-sm text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-center me-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">お気に入りに追加</div>';
+                    html += '</a>';
+                    html += '</div>';
+                    html += '<span class="mx-1 text-white">'+ response.count +'</span>';
+                    html += '<div id="tooltip-bookmark-button" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">';
+                    html += 'お気に入りに追加<div class="tooltip-arrow" data-popper-arrow></div>'
+                    html += '</div>';
+                    html += '</div>';
+                $('#bookmark').append(html);
+            }
+            const $targetEl = document.getElementById('tooltip-bookmark-button');
+            const $triggerEl = document.getElementById('tooltip-trigger-button');
+            const options = { placement: 'top',triggerType: 'hover', };
+            const instanceOptions = { id: 'tooltipContent', override: true };
+            const tooltip = new Tooltip($targetEl, $triggerEl, options, instanceOptions);
+            toastr.success(response.message);
+        } else {
+            toastr.error(response.message);
+        }
+    },
+
+    fail: function(response) {
+        toastr.error(response.message);
+    }
+    })
+})

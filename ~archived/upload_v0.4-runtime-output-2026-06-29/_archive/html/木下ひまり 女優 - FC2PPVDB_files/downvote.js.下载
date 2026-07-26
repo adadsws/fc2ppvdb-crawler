@@ -1,0 +1,145 @@
+$(document).on('click','#comment-down-vote',function(event){
+    event.preventDefault();
+    let commentId = $(this).data('id');
+    let url = $(this).data('url');
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+    }
+    $.ajax({
+        method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+            },
+        url : url,
+        data:{
+            'id': commentId,
+        },
+        dataType: 'json',
+
+    success : function(response) {
+        if (response.success === true) {
+            if(response.status === 'Downed'){
+                $("#up-vote-image-"+ commentId).remove();
+                var html = '<svg id="up-vote-image-' + commentId + '" class="w-6 h-6 text-gray-800 dark:text-gray-400 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">';
+                html += '<path fill-rule="evenodd" d="M15.03 9.684h3.965c.322 0 .64.08.925.232.286.153.532.374.717.645a2.109 2.109 0 0 1 .242 1.883l-2.36 7.201c-.288.814-.48 1.355-1.884 1.355-2.072 0-4.276-.677-6.157-1.256-.472-.145-.924-.284-1.348-.404h-.115V9.478a25.485 25.485 0 0 0 4.238-5.514 1.8 1.8 0 0 1 .901-.83 1.74 1.74 0 0 1 1.21-.048c.396.13.736.397.96.757.225.36.32.788.269 1.211l-1.562 4.63ZM4.177 10H7v8a2 2 0 1 1-4 0v-6.823C3 10.527 3.527 10 4.176 10Z" clip-rule="evenodd"/>';
+                html += '</svg>';
+                $('#up-vote-'+ commentId).append(html);
+                $("#up-counter-"+ commentId).remove();
+                var html = '<span id="up-counter-' + commentId + '" class="text-green-400">'+ response.like_count +'</span>';
+                $('#up-count-'+ commentId).append(html);
+
+                $("#down-vote-image-"+ commentId).remove();
+                var html = '<svg id="down-vote-image-' + commentId + '" class="w-6 h-6 text-gray-800 dark:text-red-700 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">';
+                html += '<path fill-rule="evenodd" d="M8.97 14.316H5.004c-.322 0-.64-.08-.925-.232a2.022 2.022 0 0 1-.717-.645 2.108 2.108 0 0 1-.242-1.883l2.36-7.201C5.769 3.54 5.96 3 7.365 3c2.072 0 4.276.678 6.156 1.256.473.145.925.284 1.35.404h.114v9.862a25.485 25.485 0 0 0-4.238 5.514c-.197.376-.516.67-.901.83a1.74 1.74 0 0 1-1.21.048 1.79 1.79 0 0 1-.96-.757 1.867 1.867 0 0 1-.269-1.211l1.562-4.63ZM19.822 14H17V6a2 2 0 1 1 4 0v6.823c0 .65-.527 1.177-1.177 1.177Z" clip-rule="evenodd"/>';
+                html += '</svg>';
+                $('#down-vote-'+ commentId).append(html);
+                $("#down-counter-"+ commentId).remove();
+                var html = '<span id="down-counter-' + commentId + '" class="text-red-700">'+ response.dislike_count +'</span>';
+                $('#down-count-'+ commentId).append(html);
+            } else if (response.status === 'cancelled') {
+                $("#up-vote-image-"+ commentId).remove();
+                var html = '<svg id="up-vote-image-' + commentId + '" class="w-6 h-6 text-gray-800 dark:text-gray-400 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">';
+                html += '<path fill-rule="evenodd" d="M15.03 9.684h3.965c.322 0 .64.08.925.232.286.153.532.374.717.645a2.109 2.109 0 0 1 .242 1.883l-2.36 7.201c-.288.814-.48 1.355-1.884 1.355-2.072 0-4.276-.677-6.157-1.256-.472-.145-.924-.284-1.348-.404h-.115V9.478a25.485 25.485 0 0 0 4.238-5.514 1.8 1.8 0 0 1 .901-.83 1.74 1.74 0 0 1 1.21-.048c.396.13.736.397.96.757.225.36.32.788.269 1.211l-1.562 4.63ZM4.177 10H7v8a2 2 0 1 1-4 0v-6.823C3 10.527 3.527 10 4.176 10Z" clip-rule="evenodd"/>';
+                html += '</svg>';
+                $('#up-vote-'+ commentId).append(html);
+                $("#up-counter-"+ commentId).remove();
+                var html = '<span id="up-counter-' + commentId + '" class="text-green-400">'+ response.like_count +'</span>';
+                $('#up-count-'+ commentId).append(html);
+
+                $("#down-vote-image-"+ commentId).remove();
+                var html = '<svg id="down-vote-image-' + commentId + '" class="w-6 h-6 text-gray-800 dark:text-gray-400 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">';
+                html += '<path fill-rule="evenodd" d="M8.97 14.316H5.004c-.322 0-.64-.08-.925-.232a2.022 2.022 0 0 1-.717-.645 2.108 2.108 0 0 1-.242-1.883l2.36-7.201C5.769 3.54 5.96 3 7.365 3c2.072 0 4.276.678 6.156 1.256.473.145.925.284 1.35.404h.114v9.862a25.485 25.485 0 0 0-4.238 5.514c-.197.376-.516.67-.901.83a1.74 1.74 0 0 1-1.21.048 1.79 1.79 0 0 1-.96-.757 1.867 1.867 0 0 1-.269-1.211l1.562-4.63ZM19.822 14H17V6a2 2 0 1 1 4 0v6.823c0 .65-.527 1.177-1.177 1.177Z" clip-rule="evenodd"/>';
+                html += '</svg>';
+                $('#down-vote-'+ commentId).append(html);
+                $("#down-counter-"+ commentId).remove();
+                var html = '<span id="down-counter-' + commentId + '" class="text-red-700">'+ response.dislike_count +'</span>';
+                $('#down-count-'+ commentId).append(html);
+            }
+            toastr.success(response.message);
+        } else {
+            toastr.error(response.message);
+        }
+    },
+
+    fail: function(response) {
+        toastr.error(response.message);
+    }
+    })
+})
+
+$(document).on('click','#reactant-down-vote',function(event){
+    event.preventDefault();
+    let reactantId = $(this).data('id');
+    let url = $(this).data('url');
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+    }
+    $.ajax({
+        method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+            },
+        url : url,
+        data:{
+            'id': reactantId,
+        },
+        dataType: 'json',
+
+    success : function(response) {
+        if (response.success === true) {
+            if(response.status === 'Downed'){
+                $("#up-vote-svg").remove();
+                var html = '<svg id="up-vote-svg" class="w-6 h-6 text-gray-800 dark:text-gray-400 dark:hover:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">';
+                html += '<path fill-rule="evenodd" d="M15.03 9.684h3.965c.322 0 .64.08.925.232.286.153.532.374.717.645a2.109 2.109 0 0 1 .242 1.883l-2.36 7.201c-.288.814-.48 1.355-1.884 1.355-2.072 0-4.276-.677-6.157-1.256-.472-.145-.924-.284-1.348-.404h-.115V9.478a25.485 25.485 0 0 0 4.238-5.514 1.8 1.8 0 0 1 .901-.83 1.74 1.74 0 0 1 1.21-.048c.396.13.736.397.96.757.225.36.32.788.269 1.211l-1.562 4.63ZM4.177 10H7v8a2 2 0 1 1-4 0v-6.823C3 10.527 3.527 10 4.176 10Z" clip-rule="evenodd"/>';
+                html += '</svg>';
+                $('#up-vote-image').append(html);
+                $("#up-counter").remove();
+                var html = '<span id="up-counter" class="mx-1 text-green-400">'+ response.like_count +'</span>';
+                $('#up-count').append(html);
+
+                $("#down-vote-svg").remove();
+                var html = '<svg id="down-vote-svg" class="w-6 h-6 text-gray-800 dark:text-red-700 dark:hover:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">';
+                html += '<path fill-rule="evenodd" d="M8.97 14.316H5.004c-.322 0-.64-.08-.925-.232a2.022 2.022 0 0 1-.717-.645 2.108 2.108 0 0 1-.242-1.883l2.36-7.201C5.769 3.54 5.96 3 7.365 3c2.072 0 4.276.678 6.156 1.256.473.145.925.284 1.35.404h.114v9.862a25.485 25.485 0 0 0-4.238 5.514c-.197.376-.516.67-.901.83a1.74 1.74 0 0 1-1.21.048 1.79 1.79 0 0 1-.96-.757 1.867 1.867 0 0 1-.269-1.211l1.562-4.63ZM19.822 14H17V6a2 2 0 1 1 4 0v6.823c0 .65-.527 1.177-1.177 1.177Z" clip-rule="evenodd"/>';
+                html += '</svg>';
+                $('#down-vote-image').append(html);
+                $("#down-counter").remove();
+                var html = '<span id="down-counter" class="mx-1 text-red-700">'+ response.dislike_count +'</span>';
+                $('#down-count').append(html);
+            } else if (response.status === 'cancelled') {
+                $("#up-vote-svg").remove();
+                var html = '<svg id="up-vote-svg" class="w-6 h-6 text-gray-800 dark:text-gray-400 dark:hover:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">';
+                html += '<path fill-rule="evenodd" d="M15.03 9.684h3.965c.322 0 .64.08.925.232.286.153.532.374.717.645a2.109 2.109 0 0 1 .242 1.883l-2.36 7.201c-.288.814-.48 1.355-1.884 1.355-2.072 0-4.276-.677-6.157-1.256-.472-.145-.924-.284-1.348-.404h-.115V9.478a25.485 25.485 0 0 0 4.238-5.514 1.8 1.8 0 0 1 .901-.83 1.74 1.74 0 0 1 1.21-.048c.396.13.736.397.96.757.225.36.32.788.269 1.211l-1.562 4.63ZM4.177 10H7v8a2 2 0 1 1-4 0v-6.823C3 10.527 3.527 10 4.176 10Z" clip-rule="evenodd"/>';
+                html += '</svg>';
+                $('#up-vote-image').append(html);
+                $("#up-counter").remove();
+                var html = '<span id="up-counter" class="mx-1 text-green-400">'+ response.like_count +'</span>';
+                $('#up-count').append(html);
+
+                $("#down-vote-svg").remove();
+                var html = '<svg id="down-vote-svg" class="w-6 h-6 text-gray-800 dark:text-gray-400 dark:hover:text-red-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">';
+                html += '<path fill-rule="evenodd" d="M8.97 14.316H5.004c-.322 0-.64-.08-.925-.232a2.022 2.022 0 0 1-.717-.645 2.108 2.108 0 0 1-.242-1.883l2.36-7.201C5.769 3.54 5.96 3 7.365 3c2.072 0 4.276.678 6.156 1.256.473.145.925.284 1.35.404h.114v9.862a25.485 25.485 0 0 0-4.238 5.514c-.197.376-.516.67-.901.83a1.74 1.74 0 0 1-1.21.048 1.79 1.79 0 0 1-.96-.757 1.867 1.867 0 0 1-.269-1.211l1.562-4.63ZM19.822 14H17V6a2 2 0 1 1 4 0v6.823c0 .65-.527 1.177-1.177 1.177Z" clip-rule="evenodd"/>';
+                html += '</svg>';
+                $('#down-vote-image').append(html);
+                $("#down-counter").remove();
+                var html = '<span id="down-counter" class="mx-1 text-red-700">'+ response.dislike_count +'</span>';
+                $('#down-count').append(html);
+            }
+            $("#percentage").remove();
+            if(response.like_count+response.dislike_count===0)
+                var html = '<span id="percentage" class="text-white">-</span>';
+            else
+                var html = '<span id="percentage" class="text-white">'+(Math.floor(response.like_count*100/(response.like_count+response.dislike_count)))+'%</span>';
+            $('#percentage-wrap').append(html);
+            toastr.success(response.message);
+        } else {
+            toastr.error(response.message);
+        }
+    },
+
+    fail: function(response) {
+        toastr.error(response.message);
+    }
+    })
+})

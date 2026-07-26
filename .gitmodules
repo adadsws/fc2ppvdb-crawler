@@ -1,0 +1,3 @@
+[submodule "~ref/grill-with-docs"]
+	path = ~ref/grill-with-docs
+	url = https://github.com/mattpocock/skills.git
